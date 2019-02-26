@@ -1,11 +1,13 @@
 type User {
   id: ID! @unique
+  email: String @unique
   name: String!
-  phone: Int
+  posts: [Post!]!
 }
 
-type Comment {
+type Post {
   id: ID! @unique
-  user: [User]!
-  content: String
+  title: String!
+  published: Boolean! @default(value: "false")
+  author: User
 }
