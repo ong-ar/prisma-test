@@ -14,3 +14,15 @@ prisma deploy
 ```
 - default 로 있는 스키마가 생성 됩니다. (user)
 - deploy 후 4433 포트로 접속하면 playground 가 뜹니다.
+
+### 기본 명령어
+
+- 모델 배포
+```
+prisma deploy
+```
+
+- 모델에 따른 graphql 스키마 생성
+```
+prisma generate
+```

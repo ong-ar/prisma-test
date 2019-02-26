@@ -2,7 +2,11 @@
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-export const typeDefs = /* GraphQL */ `type AggregateUser {
+export const typeDefs = /* GraphQL */ `type AggregateComment {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -10,9 +14,121 @@ type BatchPayload {
   count: Long!
 }
 
+type Comment {
+  id: ID!
+  user(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  content: String
+}
+
+type CommentConnection {
+  pageInfo: PageInfo!
+  edges: [CommentEdge]!
+  aggregate: AggregateComment!
+}
+
+input CommentCreateInput {
+  user: UserCreateManyInput
+  content: String
+}
+
+type CommentEdge {
+  node: Comment!
+  cursor: String!
+}
+
+enum CommentOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CommentPreviousValues {
+  id: ID!
+  content: String
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  node: Comment
+  updatedFields: [String!]
+  previousValues: CommentPreviousValues
+}
+
+input CommentSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CommentWhereInput
+  AND: [CommentSubscriptionWhereInput!]
+  OR: [CommentSubscriptionWhereInput!]
+  NOT: [CommentSubscriptionWhereInput!]
+}
+
+input CommentUpdateInput {
+  user: UserUpdateManyInput
+  content: String
+}
+
+input CommentUpdateManyMutationInput {
+  content: String
+}
+
+input CommentWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user_every: UserWhereInput
+  user_some: UserWhereInput
+  user_none: UserWhereInput
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  AND: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  NOT: [CommentWhereInput!]
+}
+
+input CommentWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
+  createComment(data: CommentCreateInput!): Comment!
+  updateComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
+  updateManyComments(data: CommentUpdateManyMutationInput!, where: CommentWhereInput): BatchPayload!
+  upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
+  deleteComment(where: CommentWhereUniqueInput!): Comment
+  deleteManyComments(where: CommentWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -39,6 +155,9 @@ type PageInfo {
 }
 
 type Query {
+  comment(where: CommentWhereUniqueInput!): Comment
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -46,12 +165,14 @@ type Query {
 }
 
 type Subscription {
+  comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User {
   id: ID!
   name: String!
+  phone: Int
 }
 
 type UserConnection {
@@ -62,6 +183,12 @@ type UserConnection {
 
 input UserCreateInput {
   name: String!
+  phone: Int
+}
+
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 type UserEdge {
@@ -74,6 +201,8 @@ enum UserOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  phone_ASC
+  phone_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -83,6 +212,49 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   name: String!
+  phone: Int
+}
+
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  phone: Int
+  phone_not: Int
+  phone_in: [Int!]
+  phone_not_in: [Int!]
+  phone_lt: Int
+  phone_lte: Int
+  phone_gt: Int
+  phone_gte: Int
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
 }
 
 type UserSubscriptionPayload {
@@ -103,12 +275,52 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  name: String
+  phone: Int
+}
+
 input UserUpdateInput {
   name: String
+  phone: Int
+}
+
+input UserUpdateManyDataInput {
+  name: String
+  phone: Int
+}
+
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyMutationInput {
   name: String
+  phone: Int
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
+input UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateDataInput!
+}
+
+input UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {
@@ -140,6 +352,14 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  phone: Int
+  phone_not: Int
+  phone_in: [Int!]
+  phone_not_in: [Int!]
+  phone_lt: Int
+  phone_lte: Int
+  phone_gt: Int
+  phone_gte: Int
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

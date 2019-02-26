@@ -1,0 +1,24 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "description": "- docker, docker-compose - prisma (brew, npm 등등 설치 방법은 여러 가지)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ong-ar/prisma-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ong-ar/prisma-test/issues"
+  },
+  "homepage": "https://github.com/ong-ar/prisma-test#readme",
+  "dependencies": {
+    "prisma-client-lib": "^1.27.1",
+    "typescript": "^3.3.3333"
+  }
+}

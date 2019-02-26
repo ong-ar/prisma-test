@@ -1,4 +1,11 @@
 type User {
   id: ID! @unique
   name: String!
+  phone: Int
+}
+
+type Comment {
+  id: ID! @unique
+  user: [User]!
+  content: String
 }
