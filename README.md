@@ -26,3 +26,30 @@ prisma deploy
 ```
 prisma generate
 ```
+
+### Authentication & Security
+
+#### Server
+
+```
+# docker-compose.yml
+environment:
+      PRISMA_CONFIG: |
+        managementApiSecret: __YOUR_MANAGEMENT_API_SECRET__
+```
+
+#### Client
+
+- service secret
+
+```
+# prisma.yml
+secret: __YOUR_MANAGEMENT_API_SECRET__
+```
+
+- management api secret
+
+```
+export PRISMA_MANAGEMENT_API_SECRET="__YOUR_MANAGEMENT_API_SECRET__"
+```
+
